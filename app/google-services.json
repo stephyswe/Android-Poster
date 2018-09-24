@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "513951136490",
+    "firebase_url": "https://poster-68d4e.firebaseio.com",
+    "project_id": "poster-68d4e",
+    "storage_bucket": "poster-68d4e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513951136490:android:c7ba02748e78612d",
+        "android_client_info": {
+          "package_name": "com.example.steph.socialapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "513951136490-mt28b597ampk3sp8uis4n9pqto7dvf4b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.steph.socialapp",
+            "certificate_hash": "a74be44d407999d5c81d671d6993557875fe85d5"
+          }
+        },
+        {
+          "client_id": "513951136490-mmsj5isddi25bgfqiuogtv8qjpc1flg9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOY1tTLMfQILRJaGnlsJJc6NN2gX1u3VQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "513951136490-mmsj5isddi25bgfqiuogtv8qjpc1flg9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
