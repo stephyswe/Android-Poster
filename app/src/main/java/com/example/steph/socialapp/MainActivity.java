@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +23,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private RecyclerView postList;
     private Toolbar mToolbar;
+    private CircleImageView navProfileImage;
+    private TextView navProfileUserName;
 
     private FirebaseAuth mAuth;
     private DatabaseReference UsersRef;
@@ -42,6 +48,32 @@ public class MainActivity extends AppCompatActivity {
 
         InitFields();
 
+//        //Setup DataUtil
+//        DataUtil util = new DataUtil();
+//        String username = (String) util.getUsername();
+//        String image = (String) util.getProfileImage();
+
+        UsersRef.child(currentID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String fullname = dataSnapshot.child("fullname").getValue().toString();
+                    String image = dataSnapshot.child("profileimage").getValue().toString();
+
+                    navProfileUserName.setText(fullname);
+                    Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfileImage);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -50,25 +82,28 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
     }
 
     private void InitFields() {
+        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
+        currentID = mAuth.getCurrentUser().getUid();
+
+        navigationView = findViewById(R.id.navigation_view);
+        View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
+        navProfileImage = navView.findViewById(R.id.nav_profile_image);
+        navProfileUserName = navView.findViewById(R.id.nav_user_full_name);
 
         mToolbar = findViewById(R.id.main_page_toolbar);
+        drawerLayout = findViewById(R.id.drawable_layout);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Home");
-
-        drawerLayout = findViewById(R.id.drawable_layout);
         actionBarDrawerToggle  = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        navigationView = findViewById(R.id.navigation_view);
-        View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
-
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
     }
 
@@ -80,13 +115,12 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser == null) {
             SendUserToLoginActivity();
         } else {
-            // Set currentID in DataUtil.
-            currentID = mAuth.getCurrentUser().getUid();
-            DataUtil datautil = new DataUtil();
-            datautil.setCurrentID(currentID);
             CheckUserExistence();
         }
     }
+
+
+
 
     private void CheckUserExistence() {
         final String currentID = mAuth.getCurrentUser().getUid();
