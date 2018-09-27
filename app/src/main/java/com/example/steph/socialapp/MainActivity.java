@@ -32,6 +32,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        InitFields();
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                UserMenuSelector(item);
+
+                return false;
+            }
+        });
+    }
+
+    private void InitFields() {
         mAuth = FirebaseAuth.getInstance();
 
         mToolbar = findViewById(R.id.main_page_toolbar);
@@ -46,16 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
         navigationView = findViewById(R.id.navigation_view);
         View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
-
-
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                UserMenuSelector(item);
-
-                return false;
-            }
-        });
     }
 
     @Override
@@ -114,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_settings:
                 Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+            case R.id.nav_logout:
+                mAuth.signOut();
+                SendUserToLoginActivity();
+                Toast.makeText(this, "Signing out..", Toast.LENGTH_SHORT).show();
                 break;
 
 
