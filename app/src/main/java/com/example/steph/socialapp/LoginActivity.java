@@ -20,10 +20,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        registerAccountLink = findViewById(R.id.register_account_link);
-        loginEmail = findViewById(R.id.login_email);
-        loginPassword = findViewById(R.id.login_password);
-        loginButton = findViewById(R.id.login_button);
+        InitializeFields();
 
         registerAccountLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,6 +29,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void InitializeFields() {
+        registerAccountLink = findViewById(R.id.register_account_link);
+        loginEmail = findViewById(R.id.login_email);
+        loginPassword = findViewById(R.id.login_password);
+        loginButton = findViewById(R.id.login_button);
     }
 
     private void SendUserToRegisterActivity() {
