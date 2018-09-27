@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ProgressDialog loadingBar;
 
+    private String currentID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +100,19 @@ public class LoginActivity extends AppCompatActivity {
         loginPassword = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
         mAuth = FirebaseAuth.getInstance();
+        //currentID = mAuth.getCurrentUser().getUid();
+
         loadingBar = new ProgressDialog(this);
     }
 
     private void SendUserToMainActivity() {
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        DataUtil datautil = new DataUtil();
+        currentID = mAuth.getCurrentUser().getUid();
+        datautil.setCurrentID(currentID);
+
         startActivity(mainIntent);
         finish();
     }

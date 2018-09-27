@@ -24,6 +24,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ProgressDialog loadingBar;
 
+    private String currentID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,15 +49,11 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) {
             SendUserToMainActivity();
+
         }
     }
 
-    private void SendUserToMainActivity() {
-        Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(mainIntent);
-        finish();
-    }
+
 
     private void CreateNewAccount() {
         String email = regEmail.getText().toString();
@@ -71,10 +69,8 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!password.equals(confirmPassword)) {
             Toast.makeText(this, "Password doesn't match", Toast.LENGTH_SHORT).show();
         } else {
-            loadingBar.setTitle("Creating Account");
-            loadingBar.setMessage("Please wait, foxes are working on it");
-            loadingBar.show();
-            loadingBar.setCanceledOnTouchOutside(true);
+
+            loadingBarSetup("Creating Account","Please wait, foxes are working on it");
 
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -82,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 SendUserToSetupActivity();
+
                                 Toast.makeText(
                                         RegisterActivity.this, "Logging in..", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
@@ -97,9 +94,21 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    private void SendUserToMainActivity() {
+        Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(mainIntent);
+        finish();
+    }
+
     private void SendUserToSetupActivity() {
         Intent setupIntent = new Intent(RegisterActivity.this, SetupActivity.class);
         setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        currentID = mAuth.getCurrentUser().getUid();
+        DataUtil datautil = new DataUtil();
+        datautil.setCurrentID(currentID);
+
         startActivity(setupIntent);
         finish();
     }
@@ -109,7 +118,15 @@ public class RegisterActivity extends AppCompatActivity {
         regPassword = findViewById(R.id.register_password);
         regConfirmPassword = findViewById(R.id.register_confirm_password);
         regAccountButton = findViewById(R.id.register_create_account_button);
-        mAuth = FirebaseAuth.getInstance();
         loadingBar = new ProgressDialog(this);
+
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    public void loadingBarSetup(String title, String message) {
+        loadingBar.setTitle(title);
+        loadingBar.setMessage(message);
+        loadingBar.show();
+        loadingBar.setCanceledOnTouchOutside(true);
     }
 }

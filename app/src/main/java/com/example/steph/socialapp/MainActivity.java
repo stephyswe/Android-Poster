@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference UsersRef;
+    private String currentID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
         View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
 
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        currentID = mAuth.getCurrentUser().getUid();
+        DataUtil datautil = new DataUtil();
+        datautil.setCurrentID(currentID);
     }
 
     @Override
