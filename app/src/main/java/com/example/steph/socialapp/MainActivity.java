@@ -70,9 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        currentID = mAuth.getCurrentUser().getUid();
-        DataUtil datautil = new DataUtil();
-        datautil.setCurrentID(currentID);
     }
 
     @Override
@@ -83,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser == null) {
             SendUserToLoginActivity();
         } else {
+            // Set currentID in DataUtil.
+            currentID = mAuth.getCurrentUser().getUid();
+            DataUtil datautil = new DataUtil();
+            datautil.setCurrentID(currentID);
             CheckUserExistence();
         }
     }
@@ -95,12 +96,10 @@ public class MainActivity extends AppCompatActivity {
                 if(!dataSnapshot.hasChild(currentID)) {
                     SendToUserToSetupActivity();
                 }
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 

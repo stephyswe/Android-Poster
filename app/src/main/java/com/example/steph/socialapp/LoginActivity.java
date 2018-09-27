@@ -109,9 +109,9 @@ public class LoginActivity extends AppCompatActivity {
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        DataUtil datautil = new DataUtil();
+//        DataUtil datautil = new DataUtil();
         currentID = mAuth.getCurrentUser().getUid();
-        datautil.setCurrentID(currentID);
+//        datautil.setCurrentID(currentID);
 
         startActivity(mainIntent);
         finish();
