@@ -289,8 +289,6 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-
-
     private void SendUserToSetupActivity()
     {
         Intent setupIntent = new Intent(MainActivity.this, SetupActivity.class);
@@ -299,14 +297,18 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
-
-
     private void SendUserToLoginActivity()
     {
         Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
         finish();
+    }
+
+    private void SendUserToSettingsActivity()
+    {
+        Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+        startActivity(settingsIntent);
     }
 
 
@@ -353,6 +355,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_settings:
+                SendUserToSettingsActivity();
                 Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
                 break;
 

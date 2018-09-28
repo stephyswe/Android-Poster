@@ -31,7 +31,8 @@
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
         <activity android:name=".PostActivity" />
         <activity android:name=".EditPostActivity" />
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
