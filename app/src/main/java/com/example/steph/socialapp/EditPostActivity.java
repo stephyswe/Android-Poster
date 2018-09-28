@@ -1,11 +1,13 @@
 package com.example.steph.socialapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -49,17 +51,19 @@ public class EditPostActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                description = dataSnapshot.child("description").getValue().toString();
-                postimage = dataSnapshot.child("postimage").getValue().toString();
-                databaseUserID = dataSnapshot.child("uid").getValue().toString();
+                if (dataSnapshot.exists()) {
+                    description = dataSnapshot.child("description").getValue().toString();
+                    postimage = dataSnapshot.child("postimage").getValue().toString();
+                    databaseUserID = dataSnapshot.child("uid").getValue().toString();
 
-                PostDescription.setText(description);
-                Picasso.with(EditPostActivity.this).load(postimage).into(PostImage);
+                    PostDescription.setText(description);
+                    Picasso.with(EditPostActivity.this).load(postimage).into(PostImage);
 
-                if (currentUserID.equals(databaseUserID)) {
-                    PostEditButton.setVisibility(View.VISIBLE);
-                    PostDeleteButton.setVisibility(View.VISIBLE);
+                    if (currentUserID.equals(databaseUserID)) {
+                        PostEditButton.setVisibility(View.VISIBLE);
+                        PostDeleteButton.setVisibility(View.VISIBLE);
 
+                    }
                 }
             }
 
@@ -68,5 +72,28 @@ public class EditPostActivity extends AppCompatActivity {
 
             }
         });
+
+        PostDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DeleteCurrentPost();
+            }
+        });
     }
+
+    private void DeleteCurrentPost() {
+        EditPostRef.removeValue();
+        SendUserToMainActivity();
+        Toast.makeText(this, "Post has been deleted.", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void SendUserToMainActivity()
+    {
+        Intent mainIntent = new Intent(EditPostActivity.this, MainActivity.class);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(mainIntent);
+        finish();
+    }
+
 }

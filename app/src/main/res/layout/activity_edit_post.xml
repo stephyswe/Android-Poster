@@ -10,10 +10,9 @@
     <ImageView
         android:id="@+id/edit_post_image"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="230dp"
         android:layout_alignParentEnd="false"
         android:layout_alignParentTop="false"
-        android:scaleType="fitXY"
         app:srcCompat="@drawable/select_image" />
 
     <TextView

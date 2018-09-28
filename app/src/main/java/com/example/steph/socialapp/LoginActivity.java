@@ -248,8 +248,6 @@ public class LoginActivity extends AppCompatActivity
         finish();
     }
 
-
-
     private void SendUserToLoginActivity()
     {
         Intent mainIntent = new Intent(LoginActivity.this, LoginActivity.class);
@@ -257,8 +255,6 @@ public class LoginActivity extends AppCompatActivity
         startActivity(mainIntent);
         finish();
     }
-
-
 
     private void SendUserToRegisterActivity()
     {
