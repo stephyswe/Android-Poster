@@ -83,10 +83,6 @@ public class PostActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Update Post");
 
-        if (getIntent().hasExtra(CURRENT_ID)) {
-            CurrentID = getIntent().getStringExtra(CURRENT_ID);
-        }
-
         SelectPostImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

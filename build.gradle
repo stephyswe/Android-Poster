@@ -1,3 +1,5 @@
+import com.sun.org.apache.xalan.internal.xsltc.compiler.If
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -13,6 +15,9 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
         classpath 'com.google.gms:google-services:3.1.1'
+
+        // If you're using a version of Gradle lower than 4.1, you must instead use:
+
     }
 }
 
@@ -20,6 +25,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+         maven {
+             url 'https://maven.google.com'
+         }
     }
 }
 
