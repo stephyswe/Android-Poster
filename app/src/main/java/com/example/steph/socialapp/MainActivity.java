@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private CircleImageView navProfileImage;
     private TextView navProfileUserName;
+    private ImageButton AddNewPostButton;
 
     private FirebaseAuth mAuth;
     private DatabaseReference UsersRef;
@@ -75,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -84,6 +84,18 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        AddNewPostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendUserToPostActivity();
+            }
+        });
+    }
+
+    private void SendUserToPostActivity() {
+        Intent postIntent = new Intent(MainActivity.this, PostActivity.class);
+        startActivity(postIntent);
     }
 
     private void InitFields() {
@@ -95,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
         navProfileImage = navView.findViewById(R.id.nav_profile_image);
         navProfileUserName = navView.findViewById(R.id.nav_user_full_name);
+        AddNewPostButton = findViewById(R.id.add_new_post_button);
 
         mToolbar = findViewById(R.id.main_page_toolbar);
         drawerLayout = findViewById(R.id.drawable_layout);
@@ -125,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
         finish();
-
     }
 
     @Override
@@ -139,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void UserMenuSelector(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.nav_post:
+                SendUserToPostActivity();
+                break;
             case R.id.nav_profile:
                 Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
                 break;
