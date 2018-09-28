@@ -31,8 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import static com.example.steph.socialapp.PutExtraConstants.CURRENT_ID;
-
 public class PostActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
@@ -47,9 +45,6 @@ public class PostActivity extends AppCompatActivity {
 
     private StorageReference PostImageRef;
     private DatabaseReference UsersRef, PostsRef;
-
-    private String CurrentID;
-
 
     private ProgressDialog loadingBar;
 
@@ -182,14 +177,9 @@ public class PostActivity extends AppCompatActivity {
                                         Toast.makeText(PostActivity.this, "Error while updating your post. More info: " + message, Toast.LENGTH_SHORT).show();
                                         loadingBar.dismiss();
                                     }
-
                                 }
                             });
-
-
-
                 }
-
             }
 
             @Override
