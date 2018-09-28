@@ -97,6 +97,13 @@ public class PostActivity extends AppCompatActivity {
         UpdatePostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+            }
+        });
+
+        UpdatePostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 ValidatePostInformation();
             }
         });
