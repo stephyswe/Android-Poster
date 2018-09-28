@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -35,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private RecyclerView postList;
     private Toolbar mToolbar;
-    private CircleImageView navProfileImage;
-    private TextView navProfileUserName;
+    private CircleImageView NavProfileImage;
+    private TextView NavProfileUserName;
     private ImageButton AddNewPostButton;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference UsersRef;
-    private String currentID;
+    private DatabaseReference UsersRef, PostsRef;
+    private String currentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,21 +51,21 @@ public class MainActivity extends AppCompatActivity {
 
         InitFields();
 
-        UsersRef.child(currentID).addValueEventListener(new ValueEventListener() {
+        UsersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
 
                     if (dataSnapshot.hasChild("fullname")) {
                         String fullname = dataSnapshot.child("fullname").getValue().toString();
-                        navProfileUserName.setText(fullname);
+                        NavProfileUserName.setText(fullname);
                     } else {
                         Toast.makeText(MainActivity.this, "Profile name do not exist.", Toast.LENGTH_SHORT).show();
                     }
 
                     if (dataSnapshot.hasChild("profileimage")) {
                         String image = dataSnapshot.child("profileimage").getValue().toString();
-                        Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfileImage);
+                        Picasso.get().load(image).placeholder(R.drawable.profile).into(NavProfileImage);
                     } else {
                         Toast.makeText(MainActivity.this, "Profile image do no exist", Toast.LENGTH_SHORT).show();
                     }
@@ -99,25 +100,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void InitFields() {
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
-        currentID = mAuth.getCurrentUser().getUid();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        PostsRef = FirebaseDatabase.getInstance().getReference().child("Posts");
 
-        navigationView = findViewById(R.id.navigation_view);
-        View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
-        navProfileImage = navView.findViewById(R.id.nav_profile_image);
-        navProfileUserName = navView.findViewById(R.id.nav_user_full_name);
-        AddNewPostButton = findViewById(R.id.add_new_post_button);
 
         mToolbar = findViewById(R.id.main_page_toolbar);
-        drawerLayout = findViewById(R.id.drawable_layout);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Home");
-        actionBarDrawerToggle  = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
+
+
+        AddNewPostButton = findViewById(R.id.add_new_post_button);
+
+
+        drawerLayout = findViewById(R.id.drawable_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        navigationView = findViewById(R.id.navigation_view);
+
+
+        postList = findViewById(R.id.all_users_post_list);
+        postList.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        postList.setLayoutManager(linearLayoutManager);
+
+
+        View navView = navigationView.inflateHeaderView(R.layout.navigation_header);
+        NavProfileImage = navView.findViewById(R.id.nav_profile_image);
+        NavProfileUserName = navView.findViewById(R.id.nav_user_full_name);
 
     }
 
