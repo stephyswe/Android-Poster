@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -19,14 +20,16 @@
 
     <TextView
         android:id="@+id/nav_user_full_name"
-        android:layout_width="135dp"
+        android:layout_width="155dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/nav_profile_image"
         android:layout_below="@+id/nav_profile_image"
-        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
         android:text="username"
         android:textAlignment="center"
-        android:textColor="@android:color/background_light" />
+        android:textColor="@android:color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -107,8 +107,8 @@ public class SetupActivity extends AppCompatActivity {
 
             loadingBar.setTitle("Profile Image");
             loadingBar.setMessage("Please wait, while we're updating your profile image.");
-            loadingBar.show();
             loadingBar.setCanceledOnTouchOutside(true);
+            loadingBar.show();
 
             Uri resultUri = result.getUri();
             StorageReference filePath = UserProfileImageRef.child(currentID + ".jpg");
