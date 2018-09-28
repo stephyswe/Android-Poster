@@ -109,7 +109,7 @@ public class PostActivity extends AppCompatActivity {
             Toast.makeText(this, "Please write something about your image..", Toast.LENGTH_SHORT).show();
         } else {
             loadingBar.setTitle("Add New Post");
-            loadingBar.setMessage("Please wait, while we updating your new post.");
+            loadingBar.setMessage("Please wait, while we adding your post.");
             loadingBar.show();
             loadingBar.setCanceledOnTouchOutside(true);
 

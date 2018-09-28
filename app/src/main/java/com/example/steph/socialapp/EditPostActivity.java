@@ -1,10 +1,14 @@
 package com.example.steph.socialapp;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +68,13 @@ public class EditPostActivity extends AppCompatActivity {
                         PostDeleteButton.setVisibility(View.VISIBLE);
 
                     }
+
+                    PostEditButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            EditCurrentPost(description);
+                        }
+                    });
                 }
             }
 
@@ -79,6 +90,36 @@ public class EditPostActivity extends AppCompatActivity {
                 DeleteCurrentPost();
             }
         });
+    }
+
+    private void EditCurrentPost(String description) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditPostActivity.this);
+        builder.setTitle("Edit Post:");
+
+        final EditText inputField = new EditText(EditPostActivity.this);
+        inputField.setText(description);
+        builder.setView(inputField);
+
+        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                EditPostRef.child("description").setValue(inputField.getText().toString());
+                Toast.makeText(EditPostActivity.this, "Post updated.", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+
+            }
+        });
+
+        Dialog dialog = builder.create();
+        dialog.show();
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.holo_green_dark);
     }
 
     private void DeleteCurrentPost() {
