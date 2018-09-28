@@ -73,13 +73,12 @@ public class SetupActivity extends AppCompatActivity {
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String image = dataSnapshot.child("profileimage").getValue().toString();
 
-//                    // Sets Profile Image.
-//                    DataUtil util = new DataUtil();
-//                    util.setProfileImage(image);
+                if (dataSnapshot.exists() && dataSnapshot.hasChild("profileimage")) {
+                    String image = dataSnapshot.child("profileimage").getValue().toString();
                     Picasso.get().load(image).placeholder(R.drawable.profile).into(profileImage);
+                } else {
+                    Toast.makeText(SetupActivity.this, "Please select profile image first.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -160,12 +159,6 @@ public class SetupActivity extends AppCompatActivity {
             Toast.makeText(this, "Please write your country..", Toast.LENGTH_SHORT).show();
         } else {
 
-//            // DataUtil stores username, full_name and country field
-//            DataUtil util = new DataUtil();
-//            util.setUsername(username);
-//            util.setFullname(full_name);
-//            util.setCountry(country);
-
             loadingBarSetup("Saving Information","Please wait, updating profile information");
 
             HashMap userMap = new HashMap();
@@ -199,8 +192,6 @@ public class SetupActivity extends AppCompatActivity {
         startActivity(mainIntent);
         finish();
     }
-
-
 
     private void InitFields() {
         userName = findViewById(R.id.setup_username);

@@ -106,8 +106,6 @@ public class RegisterActivity extends AppCompatActivity {
         setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         currentID = mAuth.getCurrentUser().getUid();
-//        DataUtil datautil = new DataUtil();
-//        datautil.setCurrentID(currentID);
 
         startActivity(setupIntent);
         finish();

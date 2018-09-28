@@ -48,22 +48,25 @@ public class MainActivity extends AppCompatActivity {
 
         InitFields();
 
-//        //Setup DataUtil
-//        DataUtil util = new DataUtil();
-//        String username = (String) util.getUsername();
-//        String image = (String) util.getProfileImage();
-
         UsersRef.child(currentID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String fullname = dataSnapshot.child("fullname").getValue().toString();
-                    String image = dataSnapshot.child("profileimage").getValue().toString();
 
-                    navProfileUserName.setText(fullname);
-                    Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfileImage);
+                    if (dataSnapshot.hasChild("fullname")) {
+                        String fullname = dataSnapshot.child("fullname").getValue().toString();
+                        navProfileUserName.setText(fullname);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Profile name do not exist.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (dataSnapshot.hasChild("profileimage")) {
+                        String image = dataSnapshot.child("profileimage").getValue().toString();
+                        Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfileImage);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Profile image do no exist", Toast.LENGTH_SHORT).show();
+                    }
                 }
-
             }
 
             @Override
@@ -78,12 +81,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 UserMenuSelector(item);
-
                 return false;
             }
         });
-
-
     }
 
     private void InitFields() {
@@ -110,33 +110,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser == null) {
-            SendUserToLoginActivity();
-        } else {
-            CheckUserExistence();
-        }
-    }
-
-
-
-
-    private void CheckUserExistence() {
-        final String currentID = mAuth.getCurrentUser().getUid();
-        UsersRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(currentID)) {
-                    SendToUserToSetupActivity();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
     }
 
     private void SendToUserToSetupActivity() {
