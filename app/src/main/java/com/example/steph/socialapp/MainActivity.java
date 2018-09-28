@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void SendUserToPostActivity() {
         Intent postIntent = new Intent(MainActivity.this, PostActivity.class);
+        postIntent.putExtra("CURRENTUSER", currentUserID);
         startActivity(postIntent);
     }
 
