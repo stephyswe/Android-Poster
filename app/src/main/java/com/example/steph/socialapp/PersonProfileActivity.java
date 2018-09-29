@@ -1,5 +1,7 @@
 package com.example.steph.socialapp;
 
+import android.graphics.Color;
+import android.icu.util.Calendar;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PersonProfileActivity extends AppCompatActivity {
@@ -25,9 +29,9 @@ public class PersonProfileActivity extends AppCompatActivity {
     private CircleImageView userProfileImage;
     private Button SendFriendReqButton, DeclineFriendReqButton;
 
-    private DatabaseReference FriendRequestRef, UsersRef;
+    private DatabaseReference FriendRequestRef, UsersRef, FriendsRef;
     private FirebaseAuth mAuth;
-    private String senderUserId, receiverUserId, CURRENT_STATE;
+    private String senderUserId, receiverUserId, CURRENT_STATE, saveCurrentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         receiverUserId = getIntent().getExtras().get("visit_user_id").toString();
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         FriendRequestRef = FirebaseDatabase.getInstance().getReference().child("FriendRequests");
+        FriendsRef = FirebaseDatabase.getInstance().getReference().child("Friends");
 
         InitFields();
 
@@ -91,6 +96,13 @@ public class PersonProfileActivity extends AppCompatActivity {
                     if (CURRENT_STATE.equals("not_friends")) {
                         SendFriendRequestToPerson();
                     }
+
+                    if (CURRENT_STATE.equals("request_sent")) {
+                        CancelFriendRequest();
+                    }
+                    if (CURRENT_STATE.equals("request_received")) {
+                        AcceptFriendRequest();
+                    }
                 }
             });
 
@@ -98,6 +110,85 @@ public class PersonProfileActivity extends AppCompatActivity {
             SendFriendReqButton.setVisibility(View.INVISIBLE);
             DeclineFriendReqButton.setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void AcceptFriendRequest() {
+        java.util.Calendar callForDate = java.util.Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        saveCurrentDate = currentDate.format(callForDate.getTime());
+
+        FriendsRef.child(senderUserId).child(receiverUserId).child("date").setValue(saveCurrentDate)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            FriendsRef.child(receiverUserId).child(senderUserId).child("date").setValue(saveCurrentDate)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                FriendRequestRef.child(senderUserId).child(receiverUserId)
+                                                        .removeValue()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    FriendRequestRef.child(receiverUserId).child(senderUserId)
+                                                                            .removeValue()
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                    if (task.isSuccessful()) {
+                                                                                        SendFriendReqButton.setEnabled(true);
+                                                                                        CURRENT_STATE = "friends";
+                                                                                        SendFriendReqButton.setText("Cancel Friendship");
+                                                                                        SendFriendReqButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
+                                                                                        DeclineFriendReqButton.setVisibility(View.INVISIBLE);
+                                                                                        DeclineFriendReqButton.setEnabled(false);
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                }
+                                                            }
+                                                        });
+
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
+
+    }
+
+    private void CancelFriendRequest() {
+        FriendRequestRef.child(senderUserId).child(receiverUserId)
+                .removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            FriendRequestRef.child(receiverUserId).child(senderUserId)
+                                    .removeValue()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                SendFriendReqButton.setEnabled(true);
+                                                CURRENT_STATE = "not_friends";
+                                                SendFriendReqButton.setText("Send Friend Request");
+                                                SendFriendReqButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+
+                                                DeclineFriendReqButton.setVisibility(View.INVISIBLE);
+                                                DeclineFriendReqButton.setEnabled(false);
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
+
     }
 
     private void MaintenanceOfButtons() {
@@ -111,9 +202,18 @@ public class PersonProfileActivity extends AppCompatActivity {
                             if (request_type.equals("sent")) {
                                 CURRENT_STATE = "request_sent";
                                 SendFriendReqButton.setText("Cancel Friend Request");
+                                SendFriendReqButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
                                 DeclineFriendReqButton.setVisibility(View.INVISIBLE);
                                 DeclineFriendReqButton.setEnabled(false);
+                            } else if (request_type.equals("received")) {
+                                CURRENT_STATE = "request_received";
+                                SendFriendReqButton.setText("Accept Friend Request");
+                                SendFriendReqButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+
+                                DeclineFriendReqButton.setVisibility(View.VISIBLE);
+                                DeclineFriendReqButton.setEnabled(true);
+
                             }
                         }
                     }
@@ -141,6 +241,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                                                 SendFriendReqButton.setEnabled(true);
                                                 CURRENT_STATE = "request_sent";
                                                 SendFriendReqButton.setText("Cancel Friend Request");
+                                                SendFriendReqButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
                                                 DeclineFriendReqButton.setVisibility(View.INVISIBLE);
                                                 DeclineFriendReqButton.setEnabled(false);
