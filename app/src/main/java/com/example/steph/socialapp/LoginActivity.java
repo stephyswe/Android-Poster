@@ -55,9 +55,7 @@ public class LoginActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         mAuth = FirebaseAuth.getInstance();
-
 
         NeedNewAccountLink = findViewById(R.id.register_account_link);
         ResetPasswordLink = findViewById(R.id.forgot_password_link);
