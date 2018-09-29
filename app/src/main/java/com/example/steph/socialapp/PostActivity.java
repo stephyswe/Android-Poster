@@ -68,15 +68,14 @@ public class PostActivity extends AppCompatActivity {
 
         mToolbar = findViewById(R.id.update_post_page_toolbar);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Update Post");
 
         SelectPostImage = findViewById(R.id.select_post_image);
         UpdatePostButton = findViewById(R.id.update_post_button);
         PostDescription = findViewById(R.id.post_description);
         loadingBar = new ProgressDialog(this);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Update Post");
 
         SelectPostImage.setOnClickListener(new View.OnClickListener() {
             @Override
