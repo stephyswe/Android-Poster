@@ -2,6 +2,7 @@ package com.example.steph.socialapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,7 +24,7 @@ public class PersonProfileActivity extends AppCompatActivity {
 
     private DatabaseReference profileUserRef, UsersRef;
     private FirebaseAuth mAuth;
-    private String senderUserId, receiverUserId;
+    private String senderUserId, receiverUserId, currentState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,8 @@ public class PersonProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_person_profile);
 
         mAuth = FirebaseAuth.getInstance();
+        senderUserId = mAuth.getCurrentUser().getUid();
+
         receiverUserId = getIntent().getExtras().get("visit_user_id").toString();
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
@@ -54,8 +57,6 @@ public class PersonProfileActivity extends AppCompatActivity {
                     String myGender = dataSnapshot.child("gender").getValue().toString();
                     String myRelationStatus = dataSnapshot.child("relationship").getValue().toString();
 
-
-
                     userProfileName.setText(myProfileName);
                     userName.setText("@" + myUserName);
                     userStatus.setText(myProfileStatus);
@@ -71,6 +72,22 @@ public class PersonProfileActivity extends AppCompatActivity {
 
             }
         });
+
+        DeclineFriendReqButton.setVisibility(View.INVISIBLE);
+        DeclineFriendReqButton.setEnabled(false);
+
+        if (!senderUserId.equals(receiverUserId)) {
+            SendFriendReqButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SendFriendReqButton.setEnabled(false);
+                }
+            });
+
+        } else {
+            SendFriendReqButton.setVisibility(View.INVISIBLE);
+            DeclineFriendReqButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void InitFields() {
@@ -85,5 +102,6 @@ public class PersonProfileActivity extends AppCompatActivity {
 
         SendFriendReqButton = findViewById(R.id.person_send_friend_request_button);
         DeclineFriendReqButton = findViewById(R.id.person_decline_friend_request_button);
+        currentState = "not_friends";
     }
 }
