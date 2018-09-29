@@ -190,8 +190,6 @@ public class MainActivity extends AppCompatActivity
         postList.setAdapter(firebaseRecyclerAdapter);
     }
 
-
-
     public static class PostsViewHolder extends RecyclerView.ViewHolder
     {
         View mView;
@@ -217,13 +215,13 @@ public class MainActivity extends AppCompatActivity
         public void setTime(String time)
         {
             TextView PostTime = (TextView) mView.findViewById(R.id.post_time);
-            PostTime.setText("    " + time);
+            PostTime.setText(" - " + time);
         }
 
         public void setDate(String date)
         {
             TextView PostDate = (TextView) mView.findViewById(R.id.post_date);
-            PostDate.setText("    " + date);
+            PostDate.setText(date);
         }
 
         public void setDescription(String description)
@@ -239,34 +237,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-
-    private void SendUserToPostActivity()
-    {
-        Intent addNewPostIntent = new Intent(MainActivity.this, PostActivity.class);
-        startActivity(addNewPostIntent);
-    }
-
-
-
     @Override
     protected void onStart()
     {
         super.onStart();
-
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if(currentUser == null)
-        {
-            SendUserToLoginActivity();
-        }
-        else
-        {
+        { SendUserToLoginActivity();
+        } else {
             CheckUserExistence();
         }
     }
-
-
 
     private void CheckUserExistence()
     {
@@ -289,41 +271,15 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void SendUserToSetupActivity()
-    {
-        Intent setupIntent = new Intent(MainActivity.this, SetupActivity.class);
-        setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(setupIntent);
-        finish();
-    }
-
-    private void SendUserToLoginActivity()
-    {
-        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(loginIntent);
-        finish();
-    }
-
-    private void SendUserToSettingsActivity()
-    {
-        Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-        startActivity(settingsIntent);
-    }
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if(actionBarDrawerToggle.onOptionsItemSelected(item))
-        {
+        if(actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
     private void UserMenuSelector(MenuItem item)
@@ -335,7 +291,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_profile:
-                Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
+                SendUserToProfileActivity();
                 break;
 
             case R.id.nav_home:
@@ -364,5 +320,34 @@ public class MainActivity extends AppCompatActivity
                 SendUserToLoginActivity();
                 break;
         }
+    }
+
+    private void SendUserToSetupActivity() {
+        Intent setupIntent = new Intent(MainActivity.this, SetupActivity.class);
+        setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(setupIntent);
+        finish();
+    }
+
+    private void SendUserToLoginActivity() {
+        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(loginIntent);
+        finish();
+    }
+
+    private void SendUserToSettingsActivity() {
+        Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+        startActivity(settingsIntent);
+    }
+
+    private void SendUserToPostActivity() {
+        Intent addNewPostIntent = new Intent(MainActivity.this, PostActivity.class);
+        startActivity(addNewPostIntent);
+    }
+
+    private void SendUserToProfileActivity() {
+        Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(profileIntent);
     }
 }

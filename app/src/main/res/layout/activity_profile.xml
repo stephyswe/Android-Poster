@@ -17,8 +17,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/my_profile_pic"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
+                android:layout_width="225dp"
+                android:layout_height="225dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/my_profile_status"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="40dp"
                 android:text="Country"
                 android:textColor="@color/colorAccent"
                 android:textAlignment="center"
