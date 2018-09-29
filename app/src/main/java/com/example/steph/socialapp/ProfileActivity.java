@@ -21,7 +21,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView userName, userProfileName, userStatus, userCountry, userGender, userRelation, userDOB;
     private CircleImageView userProfileImage;
 
-    private DatabaseReference UsersRef;
+    private DatabaseReference profileUserRef;
     private FirebaseAuth mAuth;
     private String currentID;
 
@@ -33,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentID = mAuth.getCurrentUser().getUid();
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentID);
+        profileUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentID);
 
         userName = findViewById(R.id.my_username);
         userProfileName = findViewById(R.id.my_profile_full_name);
@@ -44,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
         userDOB = findViewById(R.id.my_profile_dob);
         userProfileImage = findViewById(R.id.my_profile_pic);
 
-        UsersRef.addValueEventListener(new ValueEventListener() {
+        profileUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
