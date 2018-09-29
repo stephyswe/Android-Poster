@@ -41,7 +41,11 @@ public class PersonProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
 
-                    String myProfileImage = dataSnapshot.child("profileimage").getValue().toString();
+                    if (dataSnapshot.hasChild("profileimage")) {
+                        String myProfileImage = dataSnapshot.child("profileimage").getValue().toString();
+                        Picasso.with(PersonProfileActivity.this).load(myProfileImage).placeholder(R.drawable.profile).into(userProfileImage);
+                    }
+
                     String myUserName = dataSnapshot.child("username").getValue().toString();
                     String myProfileName = dataSnapshot.child("fullname").getValue().toString();
                     String myProfileStatus = dataSnapshot.child("status").getValue().toString();
@@ -50,7 +54,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                     String myGender = dataSnapshot.child("gender").getValue().toString();
                     String myRelationStatus = dataSnapshot.child("relationship").getValue().toString();
 
-                    Picasso.with(PersonProfileActivity.this).load(myProfileImage).placeholder(R.drawable.profile).into(userProfileImage);
+
 
                     userProfileName.setText(myProfileName);
                     userName.setText("@" + myUserName);

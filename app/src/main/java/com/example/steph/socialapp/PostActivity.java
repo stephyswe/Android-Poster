@@ -52,6 +52,7 @@ public class PostActivity extends AppCompatActivity {
 
 
     private String saveCurrentDate, saveCurrentTime, postRandomName, current_user_id;
+    private long countPosts = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,11 +113,11 @@ public class PostActivity extends AppCompatActivity {
             loadingBar.show();
             loadingBar.setCanceledOnTouchOutside(true);
 
-            UploadImageToFireBaseStorage();
+            SaveImageToFireBaseStorage();
         }
     }
 
-    private void UploadImageToFireBaseStorage() {
+    private void SaveImageToFireBaseStorage() {
         Calendar callForDate = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
         saveCurrentDate = currentDate.format(callForDate.getTime());
@@ -148,6 +149,24 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void SavingPostInformationToDatabase() {
+
+        PostsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    countPosts = dataSnapshot.getChildrenCount();
+
+                } else {
+                    countPosts = 0;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         UsersRef.child(current_user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -163,6 +182,8 @@ public class PostActivity extends AppCompatActivity {
                     postMap.put("postimage", downloadUrl);
                     postMap.put("profileimage", userProfileImage);
                     postMap.put("fullname", userFullName);
+                    postMap.put("counter", countPosts);
+
                     PostsRef.child(current_user_id + postRandomName).updateChildren(postMap)
                             .addOnCompleteListener(new OnCompleteListener() {
                                 @Override
