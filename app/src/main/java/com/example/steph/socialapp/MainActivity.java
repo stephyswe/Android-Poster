@@ -191,6 +191,15 @@ public class MainActivity extends AppCompatActivity
                             }
                         });
 
+                        viewHolder.CommentPostButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
+                                commentsIntent.putExtra("POST_KEY", PostKey);
+                                startActivity(commentsIntent);
+                            }
+                        });
+
                         viewHolder.LikePostButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -206,10 +215,8 @@ public class MainActivity extends AppCompatActivity
                                             } else {
                                                 LikesRef.child(PostKey).child(currentUserID).setValue(true);
                                                 LikeChecker = false;
-
                                             }
                                         }
-
                                     }
 
                                     @Override
