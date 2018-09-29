@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity
     private Button LoginButton;
     private ImageView googleSignInButton;
     private EditText UserEmail, UserPassword;
-    private TextView NeedNewAccountLink;
+    private TextView NeedNewAccountLink, ResetPasswordLink;
     private ProgressDialog loadingBar;
 
     private FirebaseAuth mAuth;
@@ -60,6 +60,7 @@ public class LoginActivity extends AppCompatActivity
 
 
         NeedNewAccountLink = findViewById(R.id.register_account_link);
+        ResetPasswordLink = findViewById(R.id.forgot_password_link);
         UserEmail = findViewById(R.id.login_email);
         UserPassword = findViewById(R.id.login_password);
         LoginButton = findViewById(R.id.login_button);
@@ -72,6 +73,13 @@ public class LoginActivity extends AppCompatActivity
             public void onClick(View view)
             {
                 SendUserToRegisterActivity();
+            }
+        });
+
+        ResetPasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
             }
         });
 

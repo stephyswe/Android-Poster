@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login"
+    android:padding="10dp"
     tools:context=".LoginActivity">
 
     <ImageView
@@ -112,5 +113,17 @@
             android:src="@drawable/google" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/forgot_password_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:text="Reset Password?"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
 
 </RelativeLayout>
