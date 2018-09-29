@@ -194,10 +194,18 @@ public class MainActivity extends AppCompatActivity
     {
         View mView;
 
+        ImageButton LikePostButton, CommentPostButton;
+        TextView DisplayNoOfLikes;
+
         public PostsViewHolder(View itemView)
         {
             super(itemView);
             mView = itemView;
+
+            LikePostButton = mView.findViewById(R.id.like_button);
+            CommentPostButton = mView.findViewById(R.id.comment_button);
+            DisplayNoOfLikes = mView.findViewById(R.id.display_no_of_likes);
+
         }
 
         public void setFullname(String fullname)
