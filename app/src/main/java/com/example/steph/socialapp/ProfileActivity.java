@@ -24,11 +24,13 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView userName, userProfileName, userStatus, userCountry, userGender, userRelation, userDOB;
     private CircleImageView userProfileImage;
 
-    private DatabaseReference profileUserRef;
+    private DatabaseReference profileUserRef, FriendsRef;
     private FirebaseAuth mAuth;
     private Button MyPosts, MyFriends;
 
     private String currentID;
+
+    private int countFriends = 0;
 
 
     @Override
@@ -39,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentID = mAuth.getCurrentUser().getUid();
         profileUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentID);
+        FriendsRef = FirebaseDatabase.getInstance().getReference().child("Friends");
 
         userName = findViewById(R.id.my_username);
         userProfileName = findViewById(R.id.my_profile_full_name);
@@ -63,6 +66,29 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SendUserToMyPostsActivity();
+            }
+        });
+
+        FriendsRef.child(currentID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    countFriends = (int) dataSnapshot.getChildrenCount();
+
+                    if (countFriends == 1) {
+                        MyFriends.setText("1 Friend");
+                    } else {
+                        MyFriends.setText(Integer.toString(countFriends) + " Friends");
+                    }
+                } else {
+                    MyFriends.setText("0 Friends");
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
@@ -96,8 +122,6 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     private void SendUserToFriendsActivity() {
