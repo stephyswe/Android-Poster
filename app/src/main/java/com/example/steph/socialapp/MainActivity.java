@@ -358,16 +358,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void CheckUserExistence()
-    {
+    private void CheckUserExistence() {
         final String current_user_id = mAuth.getCurrentUser().getUid();
 
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if(!dataSnapshot.child(current_user_id).hasChild("username"))
-                {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.child(current_user_id).hasChild("username")) {
                     SendUserToSetupActivity();
                 }
             }
@@ -380,8 +377,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if(actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -390,10 +386,8 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void UserMenuSelector(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    private void UserMenuSelector(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.nav_post:
                 SendUserToPostActivity();
                 break;
