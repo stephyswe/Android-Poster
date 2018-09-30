@@ -39,7 +39,6 @@ public class RegisterActivity extends AppCompatActivity {
                 CreateNewAccount();
             }
         });
-
     }
 
     @Override
@@ -49,11 +48,8 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null) {
             SendUserToMainActivity();
-
         }
     }
-
-
 
     private void CreateNewAccount() {
         String email = regEmail.getText().toString();
@@ -77,20 +73,36 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                SendUserToSetupActivity();
-
-                                Toast.makeText(
-                                        RegisterActivity.this, "Logging in..", Toast.LENGTH_SHORT).show();
+                                SendEmailVerificationMessage();
                                 loadingBar.dismiss();
                             } else {
                                 String message = task.getException().getMessage();
                                 Toast.makeText(RegisterActivity.this, "Error occurred: " + message, Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
-
-
                         }
                     });
+        }
+    }
+
+    private void SendEmailVerificationMessage() {
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(RegisterActivity.this, "Registration Complete. We've sent you an email. Please check and verify your account.", Toast.LENGTH_SHORT).show();
+                        SendUserToLoginActivity();
+                        mAuth.signOut();
+                    } else {
+                        String message = task.getException().getMessage();
+                        Toast.makeText(RegisterActivity.this, "Error: " +message, Toast.LENGTH_SHORT).show();
+                        mAuth.signOut();
+                    }
+                }
+            });
         }
     }
 
@@ -101,13 +113,11 @@ public class RegisterActivity extends AppCompatActivity {
         finish();
     }
 
-    private void SendUserToSetupActivity() {
-        Intent setupIntent = new Intent(RegisterActivity.this, SetupActivity.class);
-        setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
+    private void SendUserToLoginActivity() {
+        Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         currentID = mAuth.getCurrentUser().getUid();
-
-        startActivity(setupIntent);
+        startActivity(loginIntent);
         finish();
     }
 
