@@ -27,9 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
     private DatabaseReference profileUserRef, FriendsRef, PostsRef;
     private FirebaseAuth mAuth;
     private Button MyPostsButton, MyFriendsButton;
-
     private String currentID;
-
     private int countFriends = 0, countPosts = 0;
 
 
