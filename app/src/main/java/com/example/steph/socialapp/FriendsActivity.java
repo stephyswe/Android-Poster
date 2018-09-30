@@ -72,7 +72,6 @@ public class FriendsActivity extends AppCompatActivity {
 
         UsersRef.child(online_user_id).child("userState")
                 .updateChildren(currentStateMap);
-
     }
 
     @Override
