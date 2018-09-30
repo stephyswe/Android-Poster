@@ -1,6 +1,9 @@
 package com.example.steph.socialapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -75,6 +78,40 @@ public class FriendsActivity extends AppCompatActivity {
                             }
 
                             viewHolder.setFullname(userName);
+
+                            viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    CharSequence options[] = new CharSequence[]
+                                            {
+                                                    userName + "'s Profile",
+                                                    "Send Message"
+                                            };
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(FriendsActivity.this);
+                                    builder.setTitle("Select Option:");
+
+                                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            if (which == 0) {
+                                                Intent profileIntent = new Intent(FriendsActivity.this, PersonProfileActivity.class);
+                                                profileIntent.putExtra("visit_user_id", usersIDs);
+                                                startActivity(profileIntent);
+                                            }
+                                            if (which == 1) {
+                                                Intent chatIntent = new Intent(FriendsActivity.this, ChatActivity.class);
+                                                chatIntent.putExtra("visit_user_id", usersIDs);
+                                                startActivity(chatIntent);
+                                            }
+
+                                        }
+                                    });
+                                    builder.show();
+
+
+                                }
+                            });
 
                         }
                     }
