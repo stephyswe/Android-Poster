@@ -150,6 +150,7 @@ public class SetupActivity extends AppCompatActivity {
         String username = userName.getText().toString();
         String full_name = fullName.getText().toString();
         String country = countrySelector.getText().toString();
+        String profileimage = profileImage.toString();
 
         if (TextUtils.isEmpty(username)) {
             Toast.makeText(this, "Please write your username..", Toast.LENGTH_SHORT).show();
