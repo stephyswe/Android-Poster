@@ -24,13 +24,13 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView userName, userProfileName, userStatus, userCountry, userGender, userRelation, userDOB;
     private CircleImageView userProfileImage;
 
-    private DatabaseReference profileUserRef, FriendsRef;
+    private DatabaseReference profileUserRef, FriendsRef, PostsRef;
     private FirebaseAuth mAuth;
-    private Button MyPosts, MyFriends;
+    private Button MyPostsButton, MyFriendsButton;
 
     private String currentID;
 
-    private int countFriends = 0;
+    private int countFriends = 0, countPosts = 0;
 
 
     @Override
@@ -42,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
         currentID = mAuth.getCurrentUser().getUid();
         profileUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentID);
         FriendsRef = FirebaseDatabase.getInstance().getReference().child("Friends");
+        PostsRef = FirebaseDatabase.getInstance().getReference().child("Posts");
 
         userName = findViewById(R.id.my_username);
         userProfileName = findViewById(R.id.my_profile_full_name);
@@ -52,22 +53,47 @@ public class ProfileActivity extends AppCompatActivity {
         userDOB = findViewById(R.id.my_profile_dob);
         userProfileImage = findViewById(R.id.my_profile_pic);
 
-        MyFriends = findViewById(R.id.my_friends_button);
-        MyPosts = findViewById(R.id.my_post_button);
+        MyFriendsButton = findViewById(R.id.my_friends_button);
+        MyPostsButton = findViewById(R.id.my_post_button);
 
-        MyFriends.setOnClickListener(new View.OnClickListener() {
+        MyFriendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SendUserToFriendsActivity();
             }
         });
 
-        MyPosts.setOnClickListener(new View.OnClickListener() {
+        MyPostsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SendUserToMyPostsActivity();
             }
         });
+
+        PostsRef.orderByChild("uid")
+                .startAt(currentID).endAt(currentID + "\uf8ff")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            countPosts = (int) dataSnapshot.getChildrenCount();
+                            MyPostsButton.setText(Integer.toString(countPosts) + " Posts");
+
+                            if (countPosts == 1) {
+                                MyPostsButton.setText("1 Post");
+                            } else {
+                                MyPostsButton.setText(Integer.toString(countPosts) + " Posts");
+                            }
+                        } else {
+                            MyFriendsButton.setText("0 Posts");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
         FriendsRef.child(currentID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -76,12 +102,12 @@ public class ProfileActivity extends AppCompatActivity {
                     countFriends = (int) dataSnapshot.getChildrenCount();
 
                     if (countFriends == 1) {
-                        MyFriends.setText("1 Friend");
+                        MyFriendsButton.setText("1 Friend");
                     } else {
-                        MyFriends.setText(Integer.toString(countFriends) + " Friends");
+                        MyFriendsButton.setText(Integer.toString(countFriends) + " Friends");
                     }
                 } else {
-                    MyFriends.setText("0 Friends");
+                    MyFriendsButton.setText("0 Friends");
 
                 }
             }
