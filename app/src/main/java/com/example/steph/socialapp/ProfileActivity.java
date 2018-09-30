@@ -1,8 +1,11 @@
 package com.example.steph.socialapp;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -23,6 +26,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     private DatabaseReference profileUserRef;
     private FirebaseAuth mAuth;
+    private Button MyPosts, MyFriends;
+
     private String currentID;
 
 
@@ -43,6 +48,23 @@ public class ProfileActivity extends AppCompatActivity {
         userRelation = findViewById(R.id.my_relationship_status);
         userDOB = findViewById(R.id.my_profile_dob);
         userProfileImage = findViewById(R.id.my_profile_pic);
+
+        MyFriends = findViewById(R.id.my_friends_button);
+        MyPosts = findViewById(R.id.my_post_button);
+
+        MyFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SendUserToFriendsActivity();
+            }
+        });
+
+        MyPosts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SendUserToMyPostsActivity();
+            }
+        });
 
         profileUserRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -76,5 +98,15 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void SendUserToFriendsActivity() {
+        Intent friendsIntent = new Intent(ProfileActivity.this, FriendsActivity.class);
+        startActivity(friendsIntent);
+    }
+
+    private void SendUserToMyPostsActivity() {
+        Intent friendsIntent = new Intent(ProfileActivity.this, MyPostsActivity.class);
+        startActivity(friendsIntent);
     }
 }

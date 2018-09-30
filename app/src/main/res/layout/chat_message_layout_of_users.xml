@@ -20,7 +20,7 @@
         android:background="@drawable/chat_receiver_message_text_bg"
         android:text="receiver message"
         android:textColor="@android:color/background_light"
-        android:padding="5dp"
+        android:padding="10dp"
         android:textSize="14sp"
         android:textStyle="bold"/>
 
@@ -34,7 +34,7 @@
         android:background="@drawable/chat_sender_message_text_bg"
         android:text="sender message"
         android:textColor="@android:color/background_light"
-        android:padding="5dp"
+        android:padding="10dp"
         android:textSize="14sp"
         android:textStyle="bold"/>
 </RelativeLayout>
