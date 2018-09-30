@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -114,6 +115,16 @@ public class FriendsActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             final String userName = dataSnapshot.child("fullname").getValue().toString();
+                            final String type;
+
+                            if (dataSnapshot.hasChild("userState")) {
+                                type = dataSnapshot.child("userstate").child("type").getValue().toString();
+                                if (type.equals("online")) {
+                                    viewHolder.onlineStatusView.setVisibility(View.VISIBLE);
+                                } else {
+                                    viewHolder.onlineStatusView.setVisibility(View.INVISIBLE);
+                                }
+                            }
 
                             if (dataSnapshot.hasChild("profileimage")) {
                                 final String profileImage = dataSnapshot.child("profileimage").getValue().toString();
@@ -121,6 +132,7 @@ public class FriendsActivity extends AppCompatActivity {
                             }
 
                             viewHolder.setFullname(userName);
+
 
                             viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -148,12 +160,9 @@ public class FriendsActivity extends AppCompatActivity {
                                                 chatIntent.putExtra("userName", userName);
                                                 startActivity(chatIntent);
                                             }
-
                                         }
                                     });
                                     builder.show();
-
-
                                 }
                             });
 
@@ -174,10 +183,12 @@ public class FriendsActivity extends AppCompatActivity {
     public static class FriendsViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
+        ImageView onlineStatusView;
 
         public FriendsViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
+            onlineStatusView = mView.findViewById(R.id.all_user_online_icon);
         }
 
         public void setProfileimage(Context ctx, String profileimage) {
