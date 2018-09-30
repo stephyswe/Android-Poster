@@ -36,6 +36,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -107,7 +112,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         AddNewPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -115,9 +119,28 @@ public class MainActivity extends AppCompatActivity
                 SendUserToPostActivity();
             }
         });
-
-
         DisplayAllUsersPosts();
+    }
+
+    public void updateUserStatus(String state) {
+        String saveCurrentDate, saveCurrentTime;
+
+        Calendar calForDate = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+        saveCurrentDate = currentDate.format(calForDate.getTime());
+
+        Calendar calForTime = Calendar.getInstance();
+        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+        saveCurrentTime = currentTime.format(calForTime.getTime());
+
+        Map currentStateMap = new HashMap();
+        currentStateMap.put("time", saveCurrentTime);
+        currentStateMap.put("date", saveCurrentDate);
+        currentStateMap.put("type", state);
+
+        UsersRef.child(currentUserID).child("userState")
+                .updateChildren(currentStateMap);
+
     }
 
     private void InitFields() {
@@ -233,6 +256,8 @@ public class MainActivity extends AppCompatActivity
                     }
                 };
         postList.setAdapter(firebaseRecyclerAdapter);
+
+        updateUserStatus("online");
     }
 
     public static class PostsViewHolder extends RecyclerView.ViewHolder
@@ -341,7 +366,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                if(!dataSnapshot.hasChild(current_user_id))
+                if(!dataSnapshot.child(current_user_id).hasChild("username"))
                 {
                     SendUserToSetupActivity();
                 }
@@ -400,6 +425,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_logout:
+                updateUserStatus("offline");
                 mAuth.signOut();
                 SendUserToLoginActivity();
                 break;

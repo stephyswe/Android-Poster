@@ -130,11 +130,11 @@ public class SetupActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(SetupActivity.this, "Image added to FB Storage", Toast.LENGTH_SHORT).show();
-                                            loadingBar.dismiss();
+                                            //loadingBar.dismiss();
                                         } else {
                                             String message = task.getException().getMessage();
                                             Toast.makeText(SetupActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
-                                            loadingBar.dismiss();
+                                            //loadingBar.dismiss();
                                         }
 
                                     }
